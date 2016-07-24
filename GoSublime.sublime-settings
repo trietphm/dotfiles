@@ -1,0 +1,31 @@
+{
+    "ipc_timeout": 3,
+    "env": {
+        "GOPATH": "$GOPATH",
+        "GOROOT": "$GOROOT"
+    },
+    "on_save":
+    [{
+        "cmd": "gs9o_open", "args": {
+            "run": ["export GOGC=2000"],
+            "focus_view": false
+        }
+    },{
+        "cmd": "gs9o_open", "args": {
+            "run": ["clear"],
+            "focus_view": false
+        }
+    },{
+        "cmd": "gs9o_open", "args": {
+            "run": ["sh", "go build"],
+            "focus_view": false
+        }
+    },
+    {
+        "cmd": "gs9o_open", "args": {
+            "run": ["sh", "go vet"],
+            "focus_view": false
+        }
+    }],
+    "fmt_cmd": ["goimports"]
+}
