@@ -1,11 +1,12 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/winz/.oh-my-zsh
+  export ZSH=/home/lozi/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
+ZSH_THEME="muse"
+#robbyrussell
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -49,7 +50,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ubuntu)
+plugins=(git)
 
 # User configuration
 
@@ -82,13 +83,19 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
+export PATH="$HOME/.rbenv/bin:$PATH"
 export GOROOT=/usr/local/go
-export GOPATH=/home/winz/projects/go
-#export NODE=/home/winz/app/node-v4.2.6-linux-x64/
-export NODE=/home/winz/app/node-v0.10.45-linux-x64
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$NODE/bin
-export au=/home/winz/projects/go/src/waudio-server
-eval $(thefuck --alias)
-alias tmux="env TERM=xterm-256color tmux"
-
+export GOPATH=/home/lozi/projects/go
+export PATH=$PATH:$GOROOT/bin
+export PATH=$PATH:$GOPATH/bin
+export NODEPATH=/home/lozi/apps/node-v4.3.2-linux-x64
+export PATH=$PATH:$NODEPATH/bin
+export PATH="$HOME/.rbenv/bin:$PATH"
+export p="$HOME/projects/go/src"
+export MAVEN="/home/lozi/apps/apache-maven-3.3.9"
+export PATH=$PATH:$MAVEN/bin
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
+export STORM="/home/lozi/apps/apache-storm-1.0.1/"
+export PATH=$PATH:$STORM/bin
+eval $(thefuck --alias) 
+export TERM=xterm-256color
