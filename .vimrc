@@ -1,22 +1,38 @@
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
+
+"set color
 set termguicolors
 set t_Co=256
+
+" Map jj to Esc -> Type jj in INSERT mode to back to NORMAL mode
 :imap jj <Esc>
 
 set clipboard=unnamedplus
+
+" Show line number
 set nu
 
-set noerrorbells                " No beeps
+" No beeps
+set noerrorbells
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set history=500		" keep 50 lines of command line history
-set ruler		" show the cursor position all the time
-set showcmd		" display incomplete commands
-set incsearch		" do incremental searching
+" keep 500 lines of command line history
+set history=500
+
+" show the cursor position all the time
+set ruler
+
+" display incomplete commands
+set showcmd
+
+" do incremental searching
+set incsearch
+
+" highlight line at cursor
 set cursorline
 
 " Set to autoread when a file is changed from the outside
@@ -39,6 +55,7 @@ syntax on
 set hlsearch
 
 " Only do this part when compiled with support for autocommands.
+filetype plugin indent on
 if has("autocmd")
 
   " Enable file type detection.
@@ -76,14 +93,14 @@ set si " smart indent
 " Only define it when not defined already.
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
+			  \ | wincmd p | diffthis
 endif
 
 filetype off                  " required
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set 7 lines to the cursor - when moving vertically using j/k
+" Set scrolloff 7 lines to the cursor - when moving vertically using j/k
 set so=7
 
 " Turn on WiLd menu
@@ -96,6 +113,9 @@ set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 set backspace=indent,eol,start
 set whichwrap+=<,>,h,l
 
+" set no wrap
+set nowrap
+
 " ignore case when searching
 set ignorecase
 
@@ -106,21 +126,42 @@ set smartcase
 set incsearch
 
 " Don't redraw while executing macros (good performance config)
-"set lazyredraw 
+set lazyredraw
 
 " For regular expressions turn magic on
 set magic
+
+" Get dialog confirm when :q, :w, :wq fails
+set confirm
 
 " Show matching brackets when text indicator is over them
 set showmatch
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
+" Split vertical windows right to the current windows
+set splitright
 
-set splitright                  " Split vertical windows right to the current windows
-set splitbelow                  " Split horizontal windows below to the current windows
+" Split horizontal windows below to the current windows
+set splitbelow
 
-let g:gitgutter_max_signs = 500
+" Remember undo after quiting
+set hidden
+
+set noshowmode
+
+" Always show statusline
+set laststatus=2
+
+" Change cursor shape
+ let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+" INSERT mode - line
+let &t_SI .= "\<Esc>[5 q"
+" REPLACE mode - underline
+let &t_SR .= "\<Esc>[4 q"
+" COMMON - block
+let &t_EI .= "\<Esc>[3 q"
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backup and undo
@@ -133,6 +174,13 @@ set backupcopy=yes
 set backupskip=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*
 set directory=/tmp
 
+" Persistent undo
+" Don't forget mkdir folder $HOME/.vim/undo
+set undofile
+set undodir=$HOME/.vim/undo
+
+set undolevels=1000
+set undoreload=10000
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -173,7 +221,7 @@ map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
-" Specify the behavior when switching between buffers 
+" Specify the behavior when switching between buffers
 try
   set switchbuf=useopen,usetab,newtab
   set stal=2
@@ -183,51 +231,18 @@ endtry
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-" Shortcut to select tab
-"map <Leader>1 1gt
-"map <Leader>2 2gt
-"map <Leader>3 3gt
-"map <Leader>4 4gt
-"map <Leader>5 5gt
-"map <Leader>6 6gt
-"map <Leader>7 7gt
-"map <Leader>8 8gt
-"map <Leader>9 9gt
-
-"nnoremap <Leader>l :ls<CR>
-"nnoremap <Leader>b :bp<CR>
-"nnoremap <Leader>f :bn<CR>
-"nnoremap <Leader>g :e#<CR>
-"nnoremap <Leader>1 :1b<CR>
-"nnoremap <Leader>2 :2b<CR>
-"nnoremap <Leader>3 :3b<CR>
-"nnoremap <Leader>4 :4b<CR>
-"nnoremap <Leader>5 :5b<CR>
-"nnoremap <Leader>6 :6b<CR>
-"nnoremap <Leader>7 :7b<CR>
-"nnoremap <Leader>8 :8b<CR>
-"nnoremap <Leader>9 :9b<CR>
-"nnoremap <Leader>0 :10b<CR>
-" It's useful to show the buffer number in the status line.
-set laststatus=2 statusline=%02n:%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-
-map <Leader>n :NERDTreeToggle<CR>
-autocmd VimEnter * map <C-p> :FZF<cr>
-" Prevent FZF open file in NERDTree
-nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
-map <leader>p :FzfBuffers<cr>
-nmap <F8> :TagbarToggle<CR>
-
-"let g:nerdtree_tabs_open_on_console_startup=1
-
 " Close the current buffer
 map <leader>bd :Bclose<cr>:tabclose<cr>gT
 
 " Close all the buffers
 map <leader>ba :bufdo bd<cr>
+nnoremap <leader>q :bp<cr>:bd #<cr>
 
+" Next/Previous between buffers
 map <leader>l :bnext<cr>
 map <leader>h :bprevious<cr>
+
+set switchbuf=useopen,usetab
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing mappings
@@ -259,24 +274,17 @@ if has("mac") || has("macunix")
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => theme
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
 
-" Always show statusline
-set laststatus=2
-
 call plug#begin('~/.vim/plugged')
+Plug 'mattn/emmet-vim'
 Plug 'dracula/vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdcommenter'
-"Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tyok/nerdtree-ack'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'terryma/vim-multiple-cursors'
-
 Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-fugitive'
@@ -284,14 +292,70 @@ Plug 'tpope/vim-obsession'
 Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'ternjs/tern_for_vim'
+Plug 'morhetz/gruvbox'
+Plug 'chriskempson/base16-vim'
+Plug 'ayu-theme/ayu-vim'
+Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'othree/html5.vim'
+Plug 'maksimr/vim-jsbeautify'
+Plug 'elzr/vim-json'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-fugitive'
+Plug 'pangloss/vim-javascript'
+Plug 'wellle/tmux-complete.vim'
+Plug 'ervandew/supertab'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'FuzzyFinder'
+Plug 'jiangmiao/auto-pairs'
+Plug 'easymotion/vim-easymotion'
+Plug 'majutsushi/tagbar'
+Plug 'Shougo/echodoc.vim'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'mileszs/ack.vim'
+
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+Plug 'ascenator/L9', {'name': 'newL9'}
+
+" Autocompletion
+if has('nvim') && has('python3')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'zchee/deoplete-go', { 'do': 'make'}
+    Plug 'Shougo/neosnippet'
+    Plug 'Shougo/neosnippet-snippets'
+endif
+
+call plug#end()
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Theme
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+colorscheme dracula
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin config
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""
+"" git gutter
+let g:gitgutter_max_signs = 1000
+
+""""""""""""""""
+" airline config
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#show_buffers = 1
 let g:airline#extensions#tabline#show_tabs = 1
 let g:airline#extensions#tabline#show_splits = 1
-let g:airline#extensions#tabline#tab_nr_type = 2 
-
+let g:airline#extensions#tabline#tab_nr_type = 2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
+
+" Fast moving tab airline
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
 nmap <leader>3 <Plug>AirlineSelectTab3
@@ -304,70 +368,90 @@ nmap <leader>9 <Plug>AirlineSelectTab9
 nmap <leader>- <Plug>AirlineSelectPrevTab
 nmap <leader>+ <Plug>AirlineSelectNextTab
 
-Plug 'morhetz/gruvbox'
-Plug 'chriskempson/base16-vim'
-Plug 'ayu-theme/ayu-vim'
-Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'othree/html5.vim'
-Plug 'maksimr/vim-jsbeautify'
-Plug 'elzr/vim-json'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-let g:fzf_command_prefix = 'Fzf'
-Plug 'tpope/vim-git'
-Plug 'tpope/vim-fugitive'
-Plug 'pangloss/vim-javascript'
-Plug 'wellle/tmux-complete.vim'
-Plug 'SirVer/ultisnips'
-Plug 'FuzzyFinder'
-Plug 'jiangmiao/auto-pairs'
-Plug 'easymotion/vim-easymotion'
-Plug 'majutsushi/tagbar'
-Plug 'Shougo/echodoc.vim'
-set noshowmode
-let g:echodoc_enable_at_startup = 1
-
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-Plug 'ascenator/L9', {'name': 'newL9'}
-
-" Autocompletion
-if has('nvim') && has('python3')
-    function! DoRemote(arg)
-        UpdateRemotePlugins
-    endfunction
-
-    Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
-    Plug 'zchee/deoplete-go', { 'do': 'make'}
-    Plug 'Shougo/neosnippet'
-    Plug 'Shougo/neosnippet-snippets'
-endif
-
-call plug#end()
-
-let g:deoplete#enable_at_startup=1
-let g:deoplete#enable_smart_case = 1
-let g:neosnippet#enable_completed_snippet=1
-
-set completeopt+=noinsert
-"set completeopt=longest,menuone
-
-" Ctrl+Space autocomplete
-imap <C-Space> <C-n>
-
-colorscheme dracula
 let g:airline_theme='jellybeans'
 
+"""""""""""""""""""""""
+""" echo doc
+let g:echodoc_enable_at_startup = 1
 
-" Go config
-map <C-n> :cnext<CR>
-map <C-m> :cprevious<CR>
-nnoremap <Esc> :cclose<CR>
-nnoremap <Esc> :pc<CR>
+"""""""""""""""""""""""
+""" ack.vim
+let g:ackprg = 'ag --vimgrep'
+
+"""""""""""""""""""""""
+""" Fzf
+let g:fzf_command_prefix = 'Fzf'
+let g:fzf_buffers_jump = 1
+
+" Advanced customization using autoload functions
+inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
+
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+
+" Advanced customization using autoload functions
+inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
+
+" Map Ctrl + p to FZF
+map <C-p> :FZF<cr>
+
+" Map Leader _+ p to FzfBuffer
+map <leader>p :FzfBuffers<cr>
+
+"""""""""""""""""""""""""""""""""""""
+""" NERDTree
+" Map Toggle NERDTree
+map <Leader>n :NERDTreeToggle<CR>
+
+" Open current file in NERDTree
+map <Leader>F :NERDTreeFind<CR>
+
+"Remap key to split screen
+let NERDTreeMapOpenVSplit='<C-v>'
+let NERDTreeMapOpenSplit='<C-x>'
+let NERDTreeMapOpenInTab='<C-t>'
+
+" open NERDTree automatically on vim start, even if no file is specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Auto close NERDTree if it is the last and only buffer
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Prevent FZF open file in NERDTree
+autocmd VimEnter * nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
+
+
+"""""""""""""""""""""""
+""" Deoplete
+let g:deoplete#enable_at_startup=1
+let g:deoplete#enable_smart_case = 1
+
+set completeopt+=noinsert
+set completeopt+=preview
+
+"""""""""""""""""""""""
+""" UtilSnip
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+"""""""""""""""""""""""
+""" Supertab
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+"""""""""""""""""""""""
+" Go config (vim-go)
+map <Leader>] :cnext<CR>
+map <Leader>[ :cprevious<CR>
+nnoremap <Esc> :pc<CR> :cclose<CR>
 autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
 let g:go_fmt_command = "goimports"
+let g:go_fmt_autosave = 1
 let g:go_snippet_case_type = "camelcase"
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
@@ -388,6 +472,24 @@ set updatetime=100
 let g:go_auto_sameids = 1
 au FileType go nmap gi <Plug>(go-install)
 
+" Fast import package
+" Install https://github.com/haya14busa/gopkgs & fzf
+augroup gopkgs
+  autocmd!
+  autocmd FileType go command! -buffer Import exe fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})
+  autocmd FileType go command! -buffer Doc exe fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})
+augroup END
+
+map <Leader>i :call fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})<CR>
+
+
+"""""""""""""""""""""""""""""""
+""" Tagbar
+
+" Map F8 to toggle Tagbar
+nmap <F8> :TagbarToggle<CR>
+
+" Tagbar for go
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
@@ -415,30 +517,14 @@ let g:tagbar_type_go = {
     \ 'ctagsbin'  : 'gotags',
     \ 'ctagsargs' : '-sort -silent'
     \ }
-"""""""""End go
 
-
-" FZF
-" Mapping selecting mappings
-"nmap <leader><tab> <plug>(fzf-maps-n)
-"xmap <leader><tab> <plug>(fzf-maps-x)
-"omap <leader><tab> <plug>(fzf-maps-o)
-
-" Insert mode completion
-"imap <c-x><c-k> <plug>(fzf-complete-word)
-"imap <c-x><c-f> <plug>(fzf-complete-path)
-"imap <c-x><c-j> <plug>(fzf-complete-file-ag)
-"imap <c-x><c-l> <plug>(fzf-complete-line)
-
-" Advanced customization using autoload functions
-"inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
+"""""""""""""""""""""""
+""" Easy motion
 
 " <Leader>f{char} to move to {char}
 map  <Leader>f <Plug>(easymotion-bd-f)
 nmap <Leader>f <Plug>(easymotion-overwin-f)
 
-
 " Move to line
 map <Leader>L <Plug>(easymotion-bd-jk)
 nmap <Leader>L <Plug>(easymotion-overwin-line)
-
