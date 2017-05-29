@@ -1,12 +1,13 @@
-# Path to your oh-my-zsh installation.
-  export ZSH=/home/lozi/.oh-my-zsh
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="muse"
-#robbyrussell
+# Path to your oh-my-zsh installation.
+export ZSH=/Users/triet/.oh-my-zsh
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="winz"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -52,12 +53,11 @@ ZSH_THEME="muse"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
+source $ZSH/oh-my-zsh.sh
+
 # User configuration
 
-  export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 # export MANPATH="/usr/local/man:$MANPATH"
-
-source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -73,7 +73,7 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -83,19 +83,20 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export PATH="$HOME/.rbenv/bin:$PATH"
-export GOROOT=/usr/local/go
-export GOPATH=/home/lozi/projects/go
-export PATH=$PATH:$GOROOT/bin
-export PATH=$PATH:$GOPATH/bin
-export NODEPATH=/home/lozi/apps/node-v4.3.2-linux-x64
-export PATH=$PATH:$NODEPATH/bin
-export PATH="$HOME/.rbenv/bin:$PATH"
-export p="$HOME/projects/go/src"
-export MAVEN="/home/lozi/apps/apache-maven-3.3.9"
-export PATH=$PATH:$MAVEN/bin
-export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
-export STORM="/home/lozi/apps/apache-storm-1.0.1/"
-export PATH=$PATH:$STORM/bin
-eval $(thefuck --alias) 
-export TERM=xterm-256color
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source ~/.bash_profile
+
+# Alias vim to nvim
+if type nvim > /dev/null 2>&1; then
+  alias vim='nvim'
+fi
+export PATH="/usr/local/share/python/:$PATH"
+# Powerline
+#. /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+#. /Users/triet/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
+
+# Auto suggestion
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+alias v='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
+alias vim='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
