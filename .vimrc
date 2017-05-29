@@ -40,8 +40,8 @@ set autoread
 set autowrite
 
 " Map leader key
-let mapleader = ","	" map leader key to ,
-let g:mapleader = ","
+let mapleader = " "	" map leader key to ,
+let g:mapleader = " "
 
 " Fast saving
 nmap <leader>w :w!<cr>
@@ -310,7 +310,7 @@ Plug 'wellle/tmux-complete.vim'
 Plug 'ervandew/supertab'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'FuzzyFinder'
+"Plug 'FuzzyFinder'
 Plug 'jiangmiao/auto-pairs'
 Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'
@@ -528,3 +528,7 @@ nmap <Leader>f <Plug>(easymotion-overwin-f)
 " Move to line
 map <Leader>L <Plug>(easymotion-bd-jk)
 nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+" gitgutter
+nmap <Leader>j <Plug>GitGutterNextHunk
+nmap <Leader>k <Plug>GitGutterPrevHunk
