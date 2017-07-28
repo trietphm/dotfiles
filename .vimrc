@@ -3,7 +3,10 @@
 set nocompatible
 
 "set color
-set termguicolors
+
+if has('nvim')
+  set termguicolors
+endif
 set t_Co=256
 
 " Map jj to Esc -> Type jj in INSERT mode to back to NORMAL mode
@@ -12,7 +15,7 @@ set t_Co=256
 set clipboard=unnamedplus
 
 " Show line number
-set nu
+set relativenumber
 
 " No beeps
 set noerrorbells
@@ -286,9 +289,11 @@ Plug 'tyok/nerdtree-ack'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'airblade/vim-gitgutter'
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
 Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-surround'
 Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -303,8 +308,6 @@ Plug 'maksimr/vim-jsbeautify'
 Plug 'elzr/vim-json'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-git'
-Plug 'tpope/vim-fugitive'
 Plug 'pangloss/vim-javascript'
 Plug 'wellle/tmux-complete.vim'
 Plug 'ervandew/supertab'
@@ -316,8 +319,11 @@ Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'
 Plug 'Shougo/echodoc.vim'
 Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+"Plug 'plasticboy/vim-markdown'
 Plug 'mileszs/ack.vim'
+Plug 'johngrib/vim-game-code-break'
+Plug 'w0rp/ale'
+Plug 'sebdah/vim-delve'
 
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
@@ -346,6 +352,12 @@ colorscheme dracula
 let g:gitgutter_max_signs = 1000
 
 """"""""""""""""
+"" ale
+" Error and warning signs.
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'
+
+""""""""""""""""
 " airline config
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
@@ -354,6 +366,10 @@ let g:airline#extensions#tabline#show_tabs = 1
 let g:airline#extensions#tabline#show_splits = 1
 let g:airline#extensions#tabline#tab_nr_type = 2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
+
+" Enable integration with airline.
+let g:airline#extensions#ale#enabled = 1
+
 
 " Fast moving tab airline
 nmap <leader>1 <Plug>AirlineSelectTab1
@@ -430,6 +446,14 @@ autocmd VimEnter * nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? 
 let g:deoplete#enable_at_startup=1
 let g:deoplete#enable_smart_case = 1
 
+" Disable deoplete when in multi cursor mode
+function! Multiple_cursors_before()
+    let b:deoplete_disable_auto_complete = 1
+endfunction
+function! Multiple_cursors_after()
+    let b:deoplete_disable_auto_complete = 0
+endfunction
+
 set completeopt+=noinsert
 set completeopt+=preview
 
@@ -454,6 +478,7 @@ let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1
 let g:go_snippet_case_type = "camelcase"
 let g:go_highlight_types = 1
+let g:go_highlight_structs = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
@@ -532,3 +557,4 @@ nmap <Leader>L <Plug>(easymotion-overwin-line)
 " gitgutter
 nmap <Leader>j <Plug>GitGutterNextHunk
 nmap <Leader>k <Plug>GitGutterPrevHunk
+
