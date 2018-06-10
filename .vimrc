@@ -12,6 +12,9 @@ set t_Co=256
 " Map jj to Esc -> Type jj in INSERT mode to back to NORMAL mode
 :imap jj <Esc>
 
+" Reduce esc delay time 
+set timeoutlen=1000 ttimeoutlen=5
+
 set clipboard=unnamedplus
 
 " Show line number
@@ -197,6 +200,7 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 " => Moving around, tabs, windows and buffers
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <silent> <leader><cr> :noh<cr>
+map <silent> <leader>s :syntax sync fromstart<cr>
 
 " Move between windows
 map <C-j> <C-W>j
@@ -210,6 +214,18 @@ map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove<cr>
 map <leader>t<leader> :tabnext
+
+" yaml indentation
+au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+au FileType yml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+au FileType javascript setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+au FileType pug setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+au FileType html setlocal tabstop=2 shiftwidth=2 expandtab
+au FileType vue setlocal tabstop=2 shiftwidth=2 expandtab
+au FileType erb setlocal tabstop=2 shiftwidth=2 expandtab
+au FileType ruby setlocal tabstop=2 shiftwidth=2 expandtab
+au FileType html.erb setlocal tabstop=2 shiftwidth=2 expandtab
+au FileType html.handlebars setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 
 " Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
@@ -262,6 +278,10 @@ func! DeleteTrailingWS()
 endfunc
 autocmd BufWrite *.py :call DeleteTrailingWS()
 autocmd BufWrite *.coffee :call DeleteTrailingWS()
+autocmd BufWrite *.sql :call DeleteTrailingWS()
+autocmd BufWrite *.md :call DeleteTrailingWS()
+autocmd BufWrite *.vue :call DeleteTrailingWS()
+autocmd BufWrite *.rb :call DeleteTrailingWS()
 
 " Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
 nmap <M-j> mz:m+<cr>`z
@@ -281,20 +301,24 @@ set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
 
 call plug#begin('~/.vim/plugged')
 Plug 'mattn/emmet-vim'
-Plug 'dracula/vim'
+"Plug 'dracula/vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tyok/nerdtree-ack'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'airblade/vim-gitgutter'
 "Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
-Plug 'fatih/vim-go'
+if has('nvim')
+  Plug 'fatih/vim-go'
+  Plug 'sebdah/vim-delve'
+  Plug 'SirVer/ultisnips'
+endif
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ternjs/tern_for_vim'
@@ -305,13 +329,11 @@ Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/sy
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'othree/html5.vim'
 Plug 'maksimr/vim-jsbeautify'
-Plug 'elzr/vim-json'
+"Plug 'elzr/vim-json'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'pangloss/vim-javascript'
 Plug 'wellle/tmux-complete.vim'
 Plug 'ervandew/supertab'
-Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 "Plug 'FuzzyFinder'
 Plug 'jiangmiao/auto-pairs'
@@ -322,8 +344,42 @@ Plug 'godlygeek/tabular'
 "Plug 'plasticboy/vim-markdown'
 Plug 'mileszs/ack.vim'
 Plug 'johngrib/vim-game-code-break'
+" Plug 'w0rp/ale'
+Plug 'airblade/vim-gitgutter'
+Plug 'wakatime/vim-wakatime'
+Plug 'pangloss/vim-javascript'
+Plug 'moll/vim-node'
 Plug 'w0rp/ale'
-Plug 'sebdah/vim-delve'
+Plug 'digitaltoad/vim-pug'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'Chiel92/vim-autoformat'
+Plug 'posva/vim-vue'
+"Plug 'sbdchd/neoformat'
+"Plug 'ryanoasis/vim-devicons'
+"Plug 'vim-utils/vim-ruby-fold'
+Plug 'isRuslan/vim-es6'
+Plug 'ternjs/tern_for_vim'
+Plug 'Yggdroot/indentLine'
+Plug 'sonph/onehalf'
+Plug 'drewtempelmeyer/palenight.vim'
+
+" RUBY 
+" 
+Plug 'tpope/vim-rails'
+Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-rbenv'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-endwise'
+Plug 'ruby-formatter/rufo-vim'
+Plug 'ngmy/vim-rubocop'
+
+Plug 'editorconfig/editorconfig-vim'
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
 
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
@@ -333,15 +389,21 @@ Plug 'ascenator/L9', {'name': 'newL9'}
 if has('nvim') && has('python3')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'zchee/deoplete-go', { 'do': 'make'}
+    Plug 'fishbullet/deoplete-ruby'
     Plug 'Shougo/neosnippet'
     Plug 'Shougo/neosnippet-snippets'
+    Plug 'roxma/nvim-yarp'
+else
+  Plug 'roxma/vim-hug-neovim-rpc'
 endif
+
+Plug 'cakebaker/scss-syntax.vim'
 
 call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Theme
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-colorscheme dracula
+colorscheme palenight
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugin config
@@ -356,6 +418,10 @@ let g:gitgutter_max_signs = 1000
 " Error and warning signs.
 let g:ale_sign_error = '⤫'
 let g:ale_sign_warning = '⚠'
+let g:ale_linters = {'proto': ['protoc-gen-lint']}
+let g:ale_fixers = {
+\   'javascript': ['eslint'],
+\}
 
 """"""""""""""""
 " airline config
@@ -393,6 +459,8 @@ let g:echodoc_enable_at_startup = 1
 """""""""""""""""""""""
 """ ack.vim
 let g:ackprg = 'ag --vimgrep'
+noremap <Leader>aa :Ack <cword><cr>
+noremap <Leader>a :Ack 
 
 """""""""""""""""""""""
 """ Fzf
@@ -413,9 +481,13 @@ inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 
 " Map Ctrl + p to FZF
 map <C-p> :FZF<cr>
+map <C-b> :FzfBTags<cr>
 
 " Map Leader _+ p to FzfBuffer
 map <leader>p :FzfBuffers<cr>
+
+let g:fzf_tags_command = 'ctags -R'
+
 
 """""""""""""""""""""""""""""""""""""
 """ NERDTree
@@ -429,6 +501,8 @@ map <Leader>F :NERDTreeFind<CR>
 let NERDTreeMapOpenVSplit='<C-v>'
 let NERDTreeMapOpenSplit='<C-x>'
 let NERDTreeMapOpenInTab='<C-t>'
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 
 " open NERDTree automatically on vim start, even if no file is specified
 autocmd StdinReadPre * let s:std_in=1
@@ -440,6 +514,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " Prevent FZF open file in NERDTree
 autocmd VimEnter * nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
 
+" Remap next hunk
+let g:NERDTreeMapNextHunk = '<leader>j'
+let g:NERDTreeMapPrevHunk = '<leader>k'
 
 """""""""""""""""""""""
 """ Deoplete
@@ -459,9 +536,11 @@ set completeopt+=preview
 
 """""""""""""""""""""""
 """ UtilSnip
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+if has('nvim')
+  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:UltiSnipsJumpForwardTrigger="<tab>"
+  let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+endif
 
 """""""""""""""""""""""
 """ Supertab
@@ -469,8 +548,8 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 
 """""""""""""""""""""""
 " Go config (vim-go)
-map <Leader>] :cnext<CR>
-map <Leader>[ :cprevious<CR>
+"map <Leader>] :cnext<CR>
+"map <Leader>[ :cprevious<CR>
 nnoremap <Esc> :pc<CR> :cclose<CR>
 autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
@@ -496,6 +575,7 @@ let g:go_auto_type_info = 1
 set updatetime=100
 let g:go_auto_sameids = 1
 au FileType go nmap gi <Plug>(go-install)
+au FileType go nmap gt <Plug>(go-test)
 
 " Fast import package
 " Install https://github.com/haya14busa/gopkgs & fzf
@@ -543,6 +623,42 @@ let g:tagbar_type_go = {
     \ 'ctagsargs' : '-sort -silent'
     \ }
 
+let g:tagbar_type_ruby = {
+    \ 'kinds' : [
+        \ 'm:modules',
+        \ 'c:classes',
+        \ 'd:describes',
+        \ 'C:contexts',
+        \ 'f:methods',
+        \ 'F:singleton methods'
+    \ ]
+    \ }
+
+let g:tagbar_type_markdown = {
+    \ 'ctagstype' : 'markdown',
+    \ 'kinds' : [
+        \ 'h:Heading_L1',
+        \ 'i:Heading_L2',
+        \ 'k:Heading_L3'
+    \ ]
+    \ }
+
+if executable('ripper-tags')
+  let g:tagbar_type_ruby = {
+      \ 'kinds'      : ['m:modules',
+                      \ 'c:classes',
+                      \ 'C:constants',
+                      \ 'F:singleton methods',
+                      \ 'f:methods',
+                      \ 'a:aliases'],
+      \ 'kind2scope' : { 'c' : 'class',
+                       \ 'm' : 'class' },
+      \ 'scope2kind' : { 'class' : 'c' },
+      \ 'ctagsbin'   : 'ripper-tags',
+      \ 'ctagsargs'  : ['-f', '-']
+      \ }
+endif
+
 """""""""""""""""""""""
 """ Easy motion
 
@@ -557,4 +673,99 @@ nmap <Leader>L <Plug>(easymotion-overwin-line)
 " gitgutter
 nmap <Leader>j <Plug>GitGutterNextHunk
 nmap <Leader>k <Plug>GitGutterPrevHunk
+" Put this in vimrc or a plugin file of your own.
+" After this is configured, :ALEFix will try and fix your JS code with ESLint.
+let g:ale_fixers = {
+\   'javascript': ['eslint'],
+\}
 
+" Set this setting in vimrc if you want to fix files automatically on save.
+" This is off by default.
+let g:ale_fix_on_save = 1
+
+" Autoformat
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+let g:autoformat_remove_trailing_spaces = 0
+
+autocmd FileType html.handlebars let b:autoformat_autoindent=1
+autocmd FileType html let b:autoformat_autoindent=1
+autocmd FileType vue let b:autoformat_autoindent=1
+
+".vimrc
+map <c-f> :call JsBeautify()<cr>
+" or
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+" for json
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+" for jsx
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+" for html
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+" for css or scss
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+
+augroup filetype javascript syntax=javascript
+
+" rufo
+"let g:rufo_auto_formatting = 1
+map <leader>r :Rufo<cr>
+
+set tags=./tags;,./gems.tags;
+
+" ruby-fold
+"let g:ruby_fold_lines_limit = 200
+
+" devicons
+"set guifont=DroidSansMono\ Nerd\ Font:h11
+
+" Customize indent line
+"let g:indentLine_char = '│'
+"let g:indentLine_setColors = 0
+"let g:indentLine_color_term = 239
+"let g:indentLine_concealcursor = 'inc'
+"let g:indentLine_conceallevel = 2
+
+let g:indentLine_concealcursor="nc"
+"let g:indentLine_char = '│'
+let g:indentLine_color_gui = '#444444'
+"let g:indentLine_concealcursor=0
+"let g:indentLine_bgcolor_gui = '#FF5F00'
+"let g:indentLine_fileTypeExclude=['tex', 'json']
+let g:indentLine_setColors=1
+
+" vue language server 
+"let g:LanguageClient_serverCommands = {
+    "\ 'vue': ['vls']
+    "\ }
+let ayucolor="mirage"
+let g:palenight_terminal_italics=1
+let g:fzf_colors = { 'hl': ['fg', 'Comment'] }
+
+" Those shit to support italic
+set t_ZH=[3m
+set t_ZR=[23m
+highlight Comment cterm=italic
+highlight Comment gui=italic
+
+" Fold
+au FileType ruby setlocal foldmethod=indent foldnestmax=4 foldlevelstart=1
+
+" Alt 
+" Run a given vim command on the results of alt from a given path.
+" See usage below.
+function! AltCommand(path, vim_command)
+  let l:alternate = system("alt " . a:path)
+  if empty(l:alternate)
+    echo "No alternate file for " . a:path . " exists!"
+  else
+    exec a:vim_command . " " . l:alternate
+  endif
+endfunction
+
+" Find the alternate file for the current path and open it
+nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
+
+" ctags
+" Open the definition in a vertical split
+map <Leader>] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
