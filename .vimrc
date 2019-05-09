@@ -168,6 +168,13 @@ let &t_SR .= "\<Esc>[4 q"
 " COMMON - block
 let &t_EI .= "\<Esc>[3 q"
 
+" for command mode
+nnoremap <S-Tab> <<
+nnoremap <Tab> >>
+
+" for insert mode
+inoremap <S-Tab> <C-d>
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backup and undo
@@ -202,6 +209,9 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 map <silent> <leader><cr> :noh<cr>
 map <silent> <leader>s :syntax sync fromstart<cr>
 
+" Remap to toggle between the current and the alternate file
+map <leader>e <C-^>
+
 " Move between windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
@@ -222,7 +232,8 @@ au FileType javascript setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 au FileType pug setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 au FileType html setlocal tabstop=2 shiftwidth=2 expandtab
 au FileType vue setlocal tabstop=2 shiftwidth=2 expandtab
-au FileType erb setlocal tabstop=2 shiftwidth=2 expandtab
+au FileType eruby setlocal tabstop=2 shiftwidth=2 expandtab
+au FileType scss setlocal tabstop=2 shiftwidth=2 expandtab
 au FileType ruby setlocal tabstop=2 shiftwidth=2 expandtab
 au FileType html.erb setlocal tabstop=2 shiftwidth=2 expandtab
 au FileType html.handlebars setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
@@ -303,7 +314,8 @@ call plug#begin('~/.vim/plugged')
 Plug 'mattn/emmet-vim'
 "Plug 'dracula/vim'
 Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+" Disable due to bad performance https://github.com/Xuyuanp/nerdtree-git-plugin/issues/76
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tyok/nerdtree-ack'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -372,13 +384,13 @@ Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-endwise'
 Plug 'ruby-formatter/rufo-vim'
 Plug 'ngmy/vim-rubocop'
+Plug 'danchoi/ri.vim'
+Plug 'noprompt/vim-yardoc'
 
 Plug 'editorconfig/editorconfig-vim'
 
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+" Ansible
+Plug 'pearofducks/ansible-vim'
 
 
 " Install L9 and avoid a Naming conflict if you've already installed a
@@ -387,12 +399,17 @@ Plug 'ascenator/L9', {'name': 'newL9'}
 
 " Autocompletion
 if has('nvim') && has('python3')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'zchee/deoplete-go', { 'do': 'make'}
-    Plug 'fishbullet/deoplete-ruby'
-    Plug 'Shougo/neosnippet'
-    Plug 'Shougo/neosnippet-snippets'
-    Plug 'roxma/nvim-yarp'
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'zchee/deoplete-go', { 'do': 'make'}
+  Plug 'fishbullet/deoplete-ruby'
+  Plug 'Shougo/neosnippet'
+  Plug 'Shougo/neosnippet-snippets'
+  Plug 'roxma/nvim-yarp'
+  Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
 else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -459,8 +476,8 @@ let g:echodoc_enable_at_startup = 1
 """""""""""""""""""""""
 """ ack.vim
 let g:ackprg = 'ag --vimgrep'
-noremap <Leader>aa :Ack <cword><cr>
-noremap <Leader>a :Ack 
+noremap <Leader>aa :Ack! <cword><cr>
+noremap <Leader>a :Ack!
 
 """""""""""""""""""""""
 """ Fzf
@@ -483,11 +500,25 @@ inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 map <C-p> :FZF<cr>
 map <C-b> :FzfBTags<cr>
 
+" Map Ctrl + a to set Ansible file type
+map <C-a> :set ft=yaml.ansible<cr>
+
 " Map Leader _+ p to FzfBuffer
 map <leader>p :FzfBuffers<cr>
 
 let g:fzf_tags_command = 'ctags -R'
 
+""""""""
+" NERDCommenter
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Map Ctrl + / as commenter toggle
+nmap <C-_>   <Plug>NERDCommenterToggle
+vmap <C-_>   <Plug>NERDCommenterToggle<CR>gv
 
 """""""""""""""""""""""""""""""""""""
 """ NERDTree
@@ -663,7 +694,6 @@ endif
 """ Easy motion
 
 " <Leader>f{char} to move to {char}
-map  <Leader>f <Plug>(easymotion-bd-f)
 nmap <Leader>f <Plug>(easymotion-overwin-f)
 
 " Move to line
@@ -675,8 +705,11 @@ nmap <Leader>j <Plug>GitGutterNextHunk
 nmap <Leader>k <Plug>GitGutterPrevHunk
 " Put this in vimrc or a plugin file of your own.
 " After this is configured, :ALEFix will try and fix your JS code with ESLint.
+let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
+let g:ale_linters = {'vue': ['eslint', 'vls']}
 let g:ale_fixers = {
 \   'javascript': ['eslint'],
+\ 'vue': ['eslint']
 \}
 
 " Set this setting in vimrc if you want to fix files automatically on save.
@@ -735,9 +768,9 @@ let g:indentLine_color_gui = '#444444'
 let g:indentLine_setColors=1
 
 " vue language server 
-"let g:LanguageClient_serverCommands = {
-    "\ 'vue': ['vls']
-    "\ }
+let g:LanguageClient_serverCommands = {
+    \ 'vue': ['vls']
+    \ }
 let ayucolor="mirage"
 let g:palenight_terminal_italics=1
 let g:fzf_colors = { 'hl': ['fg', 'Comment'] }
@@ -769,3 +802,6 @@ nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
 " ctags
 " Open the definition in a vertical split
 map <Leader>] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+nnoremap <leader>d :call fzf#vim#tags(expand('<cword>'), {'options': '--exact --select-1 --exit-0'})<CR>
+nnoremap <C-p> :call fzf#vim#tags(expand('<cword>'), {'options': '--exact --select-1'})<CR>
+
