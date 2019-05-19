@@ -430,6 +430,7 @@ colorscheme palenight
 "" git gutter
 let g:gitgutter_max_signs = 1000
 
+if has('nvim')
 """"""""""""""""
 "" ale
 " Error and warning signs.
@@ -439,6 +440,7 @@ let g:ale_linters = {'proto': ['protoc-gen-lint']}
 let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \}
+endif
 
 """"""""""""""""
 " airline config
@@ -471,7 +473,9 @@ let g:airline_theme='jellybeans'
 
 """""""""""""""""""""""
 """ echo doc
-let g:echodoc_enable_at_startup = 1
+if has('nvim')
+  let g:echodoc_enable_at_startup = 1
+endif
 
 """""""""""""""""""""""
 """ ack.vim
@@ -551,19 +555,19 @@ let g:NERDTreeMapPrevHunk = '<leader>k'
 
 """""""""""""""""""""""
 """ Deoplete
-let g:deoplete#enable_at_startup=1
-let g:deoplete#enable_smart_case = 1
-
-" Disable deoplete when in multi cursor mode
-function! Multiple_cursors_before()
-    let b:deoplete_disable_auto_complete = 1
-endfunction
-function! Multiple_cursors_after()
-    let b:deoplete_disable_auto_complete = 0
-endfunction
-
-set completeopt+=noinsert
-set completeopt+=preview
+if has('nvim')
+  let g:deoplete#enable_at_startup=1
+  let g:deoplete#enable_smart_case = 1
+  
+  " Disable deoplete when in multi cursor mode
+  function! Multiple_cursors_before()
+      let b:deoplete_disable_auto_complete = 1
+      let b:deoplete_disable_auto_complete = 0
+  endfunction
+  
+  set completeopt+=noinsert
+  set completeopt+=preview
+endif
 
 """""""""""""""""""""""
 """ UtilSnip
@@ -577,46 +581,48 @@ endif
 """ Supertab
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
-"""""""""""""""""""""""
-" Go config (vim-go)
-"map <Leader>] :cnext<CR>
-"map <Leader>[ :cprevious<CR>
-nnoremap <Esc> :pc<CR> :cclose<CR>
-autocmd FileType go nmap <leader>b  <Plug>(go-build)
-autocmd FileType go nmap <leader>r  <Plug>(go-run)
-let g:go_fmt_command = "goimports"
-let g:go_fmt_autosave = 1
-let g:go_snippet_case_type = "camelcase"
-let g:go_highlight_types = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_build_constraints = 1
-let g:go_metalinter_enabled = ['vet', 'errcheck']
-let g:go_metalinter_autosave = 1
-let g:go_metalinter_autosave_enabled = ['vet']
-let g:syntastic_go_checkers = ['govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-let g:syntastic_aggregate_errors = 1
-let g:go_list_type = "quickfix"
-let g:go_auto_type_info = 1
-set updatetime=100
-let g:go_auto_sameids = 1
-au FileType go nmap gi <Plug>(go-install)
-au FileType go nmap gt <Plug>(go-test)
+if has('nvim')
+  """""""""""""""""""""""
+  " Go config (vims-go)
+  "map <Leader>] :cnext<CR>
+  "map <Leader>[ :cprevious<CR>
+  nnoremap <Esc> :pc<CR> :cclose<CR>
+  autocmd FileType go nmap <leader>b  <Plug>(go-build)
+  autocmd FileType go nmap <leader>r  <Plug>(go-run)
+  let g:go_fmt_command = "goimports"
+  let g:go_fmt_autosave = 1
+  let g:go_snippet_case_type = "camelcase"
+  let g:go_highlight_types = 1
+  let g:go_highlight_structs = 1
+  let g:go_highlight_fields = 1
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  let g:go_highlight_operators = 1
+  let g:go_highlight_extra_types = 1
+  let g:go_highlight_build_constraints = 1
+  let g:go_metalinter_enabled = ['vet', 'errcheck']
+  let g:go_metalinter_autosave = 1
+  let g:go_metalinter_autosave_enabled = ['vet']
+  let g:syntastic_go_checkers = ['govet', 'errcheck']
+  let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+  let g:syntastic_aggregate_errors = 1
+  let g:go_list_type = "quickfix"
+  let g:go_auto_type_info = 1
+  set updatetime=100
+  let g:go_auto_sameids = 1
+  au FileType go nmap gi <Plug>(go-install)
+  au FileType go nmap gt <Plug>(go-test)
 
-" Fast import package
-" Install https://github.com/haya14busa/gopkgs & fzf
-augroup gopkgs
-  autocmd!
-  autocmd FileType go command! -buffer Import exe fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})
-  autocmd FileType go command! -buffer Doc exe fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})
-augroup END
-
-map <Leader>i :call fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})<CR>
+  " Fast import package
+  " Install https://github.com/haya14busa/gopkgs & fzf
+  augroup gopkgs
+    autocmd!
+    autocmd FileType go command! -buffer Import exe fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})
+    autocmd FileType go command! -buffer Doc exe fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})
+  augroup END
+  
+  map <Leader>i :call fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})<CR>
+endif
 
 
 """""""""""""""""""""""""""""""
@@ -703,42 +709,48 @@ nmap <Leader>L <Plug>(easymotion-overwin-line)
 " gitgutter
 nmap <Leader>j <Plug>GitGutterNextHunk
 nmap <Leader>k <Plug>GitGutterPrevHunk
-" Put this in vimrc or a plugin file of your own.
-" After this is configured, :ALEFix will try and fix your JS code with ESLint.
-let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
-let g:ale_linters = {'vue': ['eslint', 'vls']}
-let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\ 'vue': ['eslint']
-\}
 
-" Set this setting in vimrc if you want to fix files automatically on save.
-" This is off by default.
-let g:ale_fix_on_save = 1
-
-" Autoformat
-let g:autoformat_autoindent = 0
-let g:autoformat_retab = 0
-let g:autoformat_remove_trailing_spaces = 0
+if has('nvim')
+  " Put this in vimrc or a plugin file of your own.
+  " After this is configured, :ALEFix will try and fix your JS code with ESLint.
+  let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
+  let g:ale_linters = {'vue': ['eslint', 'vls']}
+  let g:ale_fixers = {
+  \   'javascript': ['eslint'],
+  \ 'vue': ['eslint']
+  \}
+  
+  " Set this setting in vimrc if you want to fix files automatically on save.
+  " This is off by default.
+  let g:ale_fix_on_save = 1
+  
+  " Autoformat
+  let g:autoformat_autoindent = 0
+  let g:autoformat_retab = 0
+  let g:autoformat_remove_trailing_spaces = 0
+endif
 
 autocmd FileType html.handlebars let b:autoformat_autoindent=1
 autocmd FileType html let b:autoformat_autoindent=1
 autocmd FileType vue let b:autoformat_autoindent=1
 
-".vimrc
-map <c-f> :call JsBeautify()<cr>
-" or
-autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
-" for json
-autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
-" for jsx
-autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
-" for html
-autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
-" for css or scss
-autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
 
-augroup filetype javascript syntax=javascript
+if has('nvim')
+	".vimrc
+	map <c-f> :call JsBeautify()<cr>
+	" or
+	autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+	" for json
+	autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+	" for jsx
+	autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+	" for html
+	autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+	" for css or scss
+	autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+
+	augroup filetype javascript syntax=javascript
+endif
 
 " rufo
 "let g:rufo_auto_formatting = 1
