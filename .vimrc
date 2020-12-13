@@ -241,6 +241,7 @@ au FileType vue setlocal tabstop=2 shiftwidth=2 expandtab
 au FileType eruby setlocal tabstop=2 shiftwidth=2 expandtab
 au FileType scss setlocal tabstop=2 shiftwidth=2 expandtab
 au FileType ruby setlocal tabstop=2 shiftwidth=2 expandtab
+au FileType c setlocal tabstop=2 shiftwidth=2 expandtab
 au FileType html.erb setlocal tabstop=2 shiftwidth=2 expandtab
 au FileType html.handlebars setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 
@@ -359,18 +360,17 @@ Plug 'maksimr/vim-jsbeautify'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 "Plug 'wellle/tmux-complete.vim'
-Plug 'ervandew/supertab'
+"Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 "Plug 'FuzzyFinder'
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 "Plug 'easymotion/vim-easymotion'
-Plug 'majutsushi/tagbar'
+"Plug 'majutsushi/tagbar'
 Plug 'Shougo/echodoc.vim'
-Plug 'godlygeek/tabular'
+"Plug 'godlygeek/tabular'
 "Plug 'plasticboy/vim-markdown'
 Plug 'mileszs/ack.vim'
 "Plug 'johngrib/vim-game-code-break'
-" Plug 'w0rp/ale'
 Plug 'airblade/vim-gitgutter'
 Plug 'wakatime/vim-wakatime'
 Plug 'pangloss/vim-javascript'
@@ -380,6 +380,7 @@ Plug 'w0rp/ale'
 "Plug 'mustache/vim-mustache-handlebars'
 Plug 'Chiel92/vim-autoformat'
 Plug 'posva/vim-vue'
+Plug 'wookayin/vim-typora'
 "Plug 'sbdchd/neoformat'
 "Plug 'ryanoasis/vim-devicons'
 "Plug 'vim-utils/vim-ruby-fold'
@@ -391,13 +392,15 @@ Plug 'drewtempelmeyer/palenight.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+Plug 'reedes/vim-pencil'
+
 " RUBY 
 " 
 Plug 'tpope/vim-rails'
 Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-rbenv'
 Plug 'tpope/vim-bundler'
-Plug 'tpope/vim-endwise'
+"Plug 'tpope/vim-endwise'
 Plug 'ruby-formatter/rufo-vim'
 Plug 'ngmy/vim-rubocop'
 Plug 'danchoi/ri.vim'
@@ -419,13 +422,18 @@ Plug 'cespare/vim-toml'
 " different version somewhere else.
 Plug 'ascenator/L9', {'name': 'newL9'}
 
+" Terraform
+Plug 'hashivim/vim-terraform'
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 " Autocompletion
 if has('nvim') && has('python3')
   "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   "Plug 'zchee/deoplete-go', { 'do': 'make'}
   "Plug 'fishbullet/deoplete-ruby'
-  "Plug 'Shougo/neosnippet'
-  "Plug 'Shougo/neosnippet-snippets'
+  Plug 'Shougo/neosnippet'
+  Plug 'Shougo/neosnippet-snippets'
   Plug 'roxma/nvim-yarp'
   "Plug 'autozimu/LanguageClient-neovim', {
   "  \ 'branch': 'next',
@@ -592,8 +600,9 @@ let g:NERDTreeMapPrevHunk = '<leader>k'
 """ Deoplete
 "let g:deoplete#enable_at_startup=1
 "let g:deoplete#enable_smart_case = 1
-"call deoplete#custom#option('auto_complete_delay', 400)
+"call deoplete#custom#option('auto_complete_delay', 300)
 
+"call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
 
 " Disable deoplete when in multi cursor mode
 function! Multiple_cursors_before()
@@ -609,14 +618,14 @@ set completeopt+=preview
 """""""""""""""""""""""
 """ UtilSnip
 if has('nvim')
-  let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
+  let g:UltiSnipsExpandTrigger="<c-tab>"
+  let g:UltiSnipsJumpForwardTrigger="<c-tab>"
   let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 endif
 
 """""""""""""""""""""""
 """ Supertab
-let g:SuperTabDefaultCompletionType = '<C-n>'
+"let g:SuperTabDefaultCompletionType = '<C-n>'
 
 """""""""""""""""""""""
 " Go config (vims-go)
@@ -666,72 +675,72 @@ map <Leader>i :call fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm
 """ Tagbar
 
 " Map F8 to toggle Tagbar
-nmap <F8> :TagbarToggle<CR>
+"nmap <F8> :TagbarToggle<CR>
 
 " Tagbar for go
-let g:tagbar_type_go = {
-    \ 'ctagstype' : 'go',
-    \ 'kinds'     : [
-        \ 'p:package',
-        \ 'i:imports:1',
-        \ 'c:constants',
-        \ 'v:variables',
-        \ 't:types',
-        \ 'n:interfaces',
-        \ 'w:fields',
-        \ 'e:embedded',
-        \ 'm:methods',
-        \ 'r:constructor',
-        \ 'f:functions'
-    \ ],
-    \ 'sro' : '.',
-    \ 'kind2scope' : {
-        \ 't' : 'ctype',
-        \ 'n' : 'ntype'
-    \ },
-    \ 'scope2kind' : {
-        \ 'ctype' : 't',
-        \ 'ntype' : 'n'
-    \ },
-    \ 'ctagsbin'  : 'gotags',
-    \ 'ctagsargs' : '-sort -silent'
-    \ }
-
-let g:tagbar_type_ruby = {
-    \ 'kinds' : [
-        \ 'm:modules',
-        \ 'c:classes',
-        \ 'd:describes',
-        \ 'C:contexts',
-        \ 'f:methods',
-        \ 'F:singleton methods'
-    \ ]
-    \ }
-
-let g:tagbar_type_markdown = {
-    \ 'ctagstype' : 'markdown',
-    \ 'kinds' : [
-        \ 'h:Heading_L1',
-        \ 'i:Heading_L2',
-        \ 'k:Heading_L3'
-    \ ]
-    \ }
-
-if executable('ripper-tags')
-  let g:tagbar_type_ruby = {
-      \ 'kinds'      : ['m:modules',
-                      \ 'c:classes',
-                      \ 'C:constants',
-                      \ 'F:singleton methods',
-                      \ 'f:methods',
-                      \ 'a:aliases'],
-      \ 'kind2scope' : { 'c' : 'class',
-                       \ 'm' : 'class' },
-      \ 'scope2kind' : { 'class' : 'c' },
-      \ 'ctagsbin'   : 'ripper-tags',
-      \ 'ctagsargs'  : ['-f', '-']
-      \ }
-endif
+"let g:tagbar_type_go = {
+"    \ 'ctagstype' : 'go',
+"    \ 'kinds'     : [
+"        \ 'p:package',
+"        \ 'i:imports:1',
+"        \ 'c:constants',
+"        \ 'v:variables',
+"        \ 't:types',
+"        \ 'n:interfaces',
+"        \ 'w:fields',
+"        \ 'e:embedded',
+"        \ 'm:methods',
+"        \ 'r:constructor',
+"        \ 'f:functions'
+"    \ ],
+"    \ 'sro' : '.',
+"    \ 'kind2scope' : {
+"        \ 't' : 'ctype',
+"        \ 'n' : 'ntype'
+"    \ },
+"    \ 'scope2kind' : {
+"        \ 'ctype' : 't',
+"        \ 'ntype' : 'n'
+"    \ },
+"    \ 'ctagsbin'  : 'gotags',
+"    \ 'ctagsargs' : '-sort -silent'
+"    \ }
+"
+"let g:tagbar_type_ruby = {
+"    \ 'kinds' : [
+"        \ 'm:modules',
+"        \ 'c:classes',
+"        \ 'd:describes',
+"        \ 'C:contexts',
+"        \ 'f:methods',
+"        \ 'F:singleton methods'
+"    \ ]
+"    \ }
+"
+"let g:tagbar_type_markdown = {
+"    \ 'ctagstype' : 'markdown',
+"    \ 'kinds' : [
+"        \ 'h:Heading_L1',
+"        \ 'i:Heading_L2',
+"        \ 'k:Heading_L3'
+"    \ ]
+"    \ }
+"
+"if executable('ripper-tags')
+"  let g:tagbar_type_ruby = {
+"      \ 'kinds'      : ['m:modules',
+"                      \ 'c:classes',
+"                      \ 'C:constants',
+"                      \ 'F:singleton methods',
+"                      \ 'f:methods',
+"                      \ 'a:aliases'],
+"      \ 'kind2scope' : { 'c' : 'class',
+"                       \ 'm' : 'class' },
+"      \ 'scope2kind' : { 'class' : 'c' },
+"      \ 'ctagsbin'   : 'ripper-tags',
+"      \ 'ctagsargs'  : ['-f', '-']
+"      \ }
+"endif
 
 """""""""""""""""""""""
 """ Easy motion
@@ -849,10 +858,63 @@ map <Leader>] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 nnoremap <leader>d :call fzf#vim#tags(expand('<cword>'), {'options': '--exact --select-1 --exit-0'})<CR>
 nnoremap <C-p> :call fzf#vim#tags(expand('<cword>'), {'options': '--exact --select-1'})<CR>
 
-" coc highlight
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
 "rust
 let g:rustfmt_autosave = 1
 autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/,$RUST_SRC_PATH/rusty-tags.vi
 autocmd BufWritePost *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" | redraw!
+
+" Terraform
+" Allow vim-terraform to align settings automatically with Tabularize.
+let g:terraform_align=1
+" Allow vim-terraform to automatically format *.tf and *.tfvars files with terraform fmt. 
+let g:terraform_fmt_on_save=1
+
+" COC
+" coc highlight
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+let g:LanguageClient_serverCommands = {
+  \ 'cpp': ['clangd'],
+  \ 'c': ['clangd'],
+  \ }
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+"let g:coc_snippet_next = '<tab>'
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+"endwise
+"let g:endwise_no_mappings = v:true
+"inoremap <expr> <Plug>CustomCocCR pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"imap <CR> <Plug>CustomCocCR<Plug>DiscretionaryEnd
