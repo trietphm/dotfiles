@@ -19,6 +19,7 @@ set clipboard=unnamedplus
 
 " Show line number
 set relativenumber
+set number
 
 " No beeps
 set noerrorbells
@@ -300,6 +301,7 @@ autocmd BufWrite *.sql :call DeleteTrailingWS()
 autocmd BufWrite *.md :call DeleteTrailingWS()
 autocmd BufWrite *.vue :call DeleteTrailingWS()
 autocmd BufWrite *.rb :call DeleteTrailingWS()
+autocmd BufWrite *.rake :call DeleteTrailingWS()
 autocmd BufWrite *.yml :call DeleteTrailingWS()
 autocmd BufWrite *.yaml :call DeleteTrailingWS()
 
@@ -425,7 +427,9 @@ Plug 'ascenator/L9', {'name': 'newL9'}
 " Terraform
 Plug 'hashivim/vim-terraform'
 
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter'
+"", {'do': ':TSUpdate'}
+"Plug 'nvim-treesitter/nvim-treesitter'
 
 " Autocompletion
 if has('nvim') && has('python3')
@@ -446,6 +450,11 @@ endif
 
 Plug 'cakebaker/scss-syntax.vim'
 
+" Set icons per file extension
+Plug 'ryanoasis/vim-devicons'
+" Color the icon
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
 call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Theme
@@ -465,10 +474,10 @@ let g:gitgutter_max_signs = 1000
 " Error and warning signs.
 let g:ale_sign_error = '⤫'
 let g:ale_sign_warning = '⚠'
-let g:ale_linters = {'proto': ['protoc-gen-lint']}
-let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\}
+"let g:ale_linters = {'proto': ['protoc-gen-lint']}
+"let g:ale_fixers = {
+"\   'javascript': ['eslint'],
+"\}
 
 """"""""""""""""
 " airline config
@@ -510,6 +519,7 @@ endif
 """""""""""""""""""""""
 """ ack.vim
 let g:ackprg = 'ag --vimgrep'
+"let g:ackpreview = 1
 noremap <Leader>aa :Ack! <cword><cr>
 noremap <Leader>a :Ack!
 
@@ -544,7 +554,13 @@ let g:fzf_tags_command = 'ctags -R'
 
 """"""""""""""""""""""""
 """ Fzf.vim
-command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
+command! -bang -nargs=* Rg 
+	\ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
+	\ fzf#vim#with_preview({'options': ['--delimiter=:', '--nth=2..', '--info=inline']}),
+	\ <bang>0)
+
+	"\ {'options': '--delimiter : --nth 4..'},
+	"\ 1, {'options': ['--delimiter' , '--nth 4..', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']},
 "command! -bang -nargs=* Rg
 "  \ call fzf#vim#grep(
 "  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
@@ -552,6 +568,10 @@ command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-hea
 "  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
 "  \   <bang>0)
 nnoremap <C-f> :Rg<Cr>
+
+let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+
+
 
 """"""""
 " NERDCommenter
@@ -581,6 +601,7 @@ let NERDTreeMapOpenSplit='<C-x>'
 let NERDTreeMapOpenInTab='<C-t>'
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
+let g:NERDTreeIgnore = ['^node_modules$']
 
 " open NERDTree automatically on vim start, even if no file is specified
 autocmd StdinReadPre * let s:std_in=1
@@ -758,7 +779,7 @@ nmap <Leader>k <Plug>(GitGutterPrevHunk)
 " Put this in vimrc or a plugin file of your own.
 " After this is configured, :ALEFix will try and fix your JS code with ESLint.
 let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
-let g:ale_linters = {'vue': ['eslint', 'vls']}
+let g:ale_linters = {'vue': ['eslint', 'vls'], 'yaml': []}
 let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \ 'vue': ['eslint']
@@ -918,3 +939,27 @@ endif
 "let g:endwise_no_mappings = v:true
 "inoremap <expr> <Plug>CustomCocCR pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 "imap <CR> <Plug>CustomCocCR<Plug>DiscretionaryEnd
+
+" Custom icon color
+let s:brown = "905532"
+let s:aqua =  "3AFFDB"
+let s:blue = "689FB6"
+let s:darkBlue = "44788E"
+let s:purple = "834F79"
+let s:lightPurple = "834F79"
+let s:red = "AE403F"
+let s:beige = "F5C06F"
+let s:yellow = "F09F17"
+let s:orange = "D4843E"
+let s:darkOrange = "F16529"
+let s:pink = "CB6F6F"
+let s:salmon = "EE6E73"
+let s:green = "8FAA54"
+let s:lightGreen = "31B53E"
+let s:white = "FFFFFF"
+let s:rspec_red = 'FE405F'
+let s:git_orange = 'F54D27'
+
+let g:NERDTreeLimitedSyntax = 1
+let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExtensionHighlightColor['go'] = s:blue " sets the color of css files to blue
