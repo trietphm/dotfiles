@@ -2,6 +2,148 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" Plug management
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin('~/.vim/plugged')
+"Plug 'mattn/emmet-vim'
+"Plug 'dracula/vim'
+Plug 'scrooloose/nerdtree'
+" Disable due to bad performance https://github.com/Xuyuanp/nerdtree-git-plugin/issues/76
+" Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdcommenter'
+Plug 'tyok/nerdtree-ack'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'terryma/vim-multiple-cursors'
+"Plug 'scrooloose/syntastic'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-surround'
+if has('nvim')
+  Plug 'fatih/vim-go'
+  Plug 'sebdah/vim-delve'
+  Plug 'SirVer/ultisnips'
+endif
+Plug 'AndrewRadev/splitjoin.vim'
+"Plug 'morhetz/gruvbox'
+"Plug 'chriskempson/base16-vim'
+"Plug 'ayu-theme/ayu-vim'
+Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'othree/html5.vim'
+Plug 'maksimr/vim-jsbeautify'
+"Plug 'elzr/vim-json'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+"Plug 'wellle/tmux-complete.vim'
+"Plug 'ervandew/supertab'
+Plug 'honza/vim-snippets'
+"Plug 'FuzzyFinder'
+"Plug 'jiangmiao/auto-pairs'
+"Plug 'easymotion/vim-easymotion'
+"Plug 'majutsushi/tagbar'
+Plug 'Shougo/echodoc.vim'
+"Plug 'godlygeek/tabular'
+"Plug 'plasticboy/vim-markdown'
+Plug 'mileszs/ack.vim'
+"Plug 'johngrib/vim-game-code-break'
+Plug 'airblade/vim-gitgutter'
+Plug 'wakatime/vim-wakatime'
+Plug 'pangloss/vim-javascript'
+Plug 'moll/vim-node'
+Plug 'w0rp/ale'
+"Plug 'digitaltoad/vim-pug'
+"Plug 'mustache/vim-mustache-handlebars'
+Plug 'Chiel92/vim-autoformat'
+Plug 'posva/vim-vue'
+Plug 'wookayin/vim-typora'
+"Plug 'sbdchd/neoformat'
+"Plug 'vim-utils/vim-ruby-fold'
+Plug 'isRuslan/vim-es6'
+"Plug 'ternjs/tern_for_vim'
+Plug 'Yggdroot/indentLine'
+"Plug 'sonph/onehalf'
+Plug 'drewtempelmeyer/palenight.vim'
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'reedes/vim-pencil'
+
+" RUBY 
+" 
+Plug 'tpope/vim-rails'
+Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-rbenv'
+Plug 'tpope/vim-bundler'
+"Plug 'tpope/vim-endwise'
+Plug 'ruby-formatter/rufo-vim'
+Plug 'ngmy/vim-rubocop'
+Plug 'danchoi/ri.vim'
+Plug 'noprompt/vim-yardoc'
+
+" Rust
+Plug 'rust-lang/rust.vim'
+
+Plug 'editorconfig/editorconfig-vim'
+
+" Ansible
+Plug 'pearofducks/ansible-vim'
+" DBML
+Plug 'jidn/vim-dbml'
+
+Plug 'cespare/vim-toml'
+
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+Plug 'ascenator/L9', {'name': 'newL9'}
+
+" Terraform
+Plug 'hashivim/vim-terraform'
+
+Plug 'nvim-treesitter/nvim-treesitter'
+"", {'do': ':TSUpdate'}
+"Plug 'nvim-treesitter/nvim-treesitter'
+
+" Autocompletion
+if has('nvim') && has('python3')
+  "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  "Plug 'zchee/deoplete-go', { 'do': 'make'}
+  "Plug 'fishbullet/deoplete-ruby'
+  Plug 'Shougo/neosnippet'
+  Plug 'Shougo/neosnippet-snippets'
+  Plug 'roxma/nvim-yarp'
+  "Plug 'autozimu/LanguageClient-neovim', {
+  "  \ 'branch': 'next',
+  "  \ 'do': 'bash install.sh',
+  "  \ }
+
+else
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+Plug 'cakebaker/scss-syntax.vim'
+
+" Set icons per file extension
+Plug 'ryanoasis/vim-devicons'
+Plug 'kyazdani42/nvim-web-devicons'
+" Color the icon
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+" Show a charater | in each indent
+Plug 'lukas-reineke/indent-blankline.nvim'
+
+" Buffer line
+Plug 'akinsho/bufferline.nvim'
+
+" Lua line
+Plug 'hoob3rt/lualine.nvim'
+
+" For showing pictogram
+Plug 'onsails/lspkind-nvim'
+
+call plug#end()
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 "set color
 
 if has('nvim')
@@ -325,148 +467,6 @@ set shortmess+=c
 set signcolumn=yes
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
-
-call plug#begin('~/.vim/plugged')
-"Plug 'mattn/emmet-vim'
-"Plug 'dracula/vim'
-Plug 'scrooloose/nerdtree'
-" Disable due to bad performance https://github.com/Xuyuanp/nerdtree-git-plugin/issues/76
-" Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'scrooloose/nerdcommenter'
-Plug 'tyok/nerdtree-ack'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'terryma/vim-multiple-cursors'
-"Plug 'scrooloose/syntastic'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-git'
-Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-surround'
-if has('nvim')
-  Plug 'fatih/vim-go'
-  Plug 'sebdah/vim-delve'
-  Plug 'SirVer/ultisnips'
-endif
-Plug 'AndrewRadev/splitjoin.vim'
-"Plug 'morhetz/gruvbox'
-"Plug 'chriskempson/base16-vim'
-"Plug 'ayu-theme/ayu-vim'
-Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'othree/html5.vim'
-Plug 'maksimr/vim-jsbeautify'
-"Plug 'elzr/vim-json'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-"Plug 'wellle/tmux-complete.vim'
-"Plug 'ervandew/supertab'
-Plug 'honza/vim-snippets'
-"Plug 'FuzzyFinder'
-"Plug 'jiangmiao/auto-pairs'
-"Plug 'easymotion/vim-easymotion'
-"Plug 'majutsushi/tagbar'
-Plug 'Shougo/echodoc.vim'
-"Plug 'godlygeek/tabular'
-"Plug 'plasticboy/vim-markdown'
-Plug 'mileszs/ack.vim'
-"Plug 'johngrib/vim-game-code-break'
-Plug 'airblade/vim-gitgutter'
-Plug 'wakatime/vim-wakatime'
-Plug 'pangloss/vim-javascript'
-Plug 'moll/vim-node'
-Plug 'w0rp/ale'
-"Plug 'digitaltoad/vim-pug'
-"Plug 'mustache/vim-mustache-handlebars'
-Plug 'Chiel92/vim-autoformat'
-Plug 'posva/vim-vue'
-Plug 'wookayin/vim-typora'
-"Plug 'sbdchd/neoformat'
-"Plug 'vim-utils/vim-ruby-fold'
-Plug 'isRuslan/vim-es6'
-"Plug 'ternjs/tern_for_vim'
-Plug 'Yggdroot/indentLine'
-"Plug 'sonph/onehalf'
-Plug 'drewtempelmeyer/palenight.vim'
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-Plug 'reedes/vim-pencil'
-
-" RUBY 
-" 
-Plug 'tpope/vim-rails'
-Plug 'vim-ruby/vim-ruby'
-Plug 'tpope/vim-rbenv'
-Plug 'tpope/vim-bundler'
-"Plug 'tpope/vim-endwise'
-Plug 'ruby-formatter/rufo-vim'
-Plug 'ngmy/vim-rubocop'
-Plug 'danchoi/ri.vim'
-Plug 'noprompt/vim-yardoc'
-
-" Rust
-Plug 'rust-lang/rust.vim'
-
-Plug 'editorconfig/editorconfig-vim'
-
-" Ansible
-Plug 'pearofducks/ansible-vim'
-" DBML
-Plug 'jidn/vim-dbml'
-
-Plug 'cespare/vim-toml'
-
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-Plug 'ascenator/L9', {'name': 'newL9'}
-
-" Terraform
-Plug 'hashivim/vim-terraform'
-
-Plug 'nvim-treesitter/nvim-treesitter'
-"", {'do': ':TSUpdate'}
-"Plug 'nvim-treesitter/nvim-treesitter'
-
-" Autocompletion
-if has('nvim') && has('python3')
-  "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  "Plug 'zchee/deoplete-go', { 'do': 'make'}
-  "Plug 'fishbullet/deoplete-ruby'
-  Plug 'Shougo/neosnippet'
-  Plug 'Shougo/neosnippet-snippets'
-  Plug 'roxma/nvim-yarp'
-  "Plug 'autozimu/LanguageClient-neovim', {
-  "  \ 'branch': 'next',
-  "  \ 'do': 'bash install.sh',
-  "  \ }
-
-else
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-
-Plug 'cakebaker/scss-syntax.vim'
-
-" Set icons per file extension
-Plug 'ryanoasis/vim-devicons'
-Plug 'kyazdani42/nvim-web-devicons'
-" Color the icon
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
-" Show a charater | in each indent
-Plug 'lukas-reineke/indent-blankline.nvim'
-
-" Buffer line
-Plug 'akinsho/bufferline.nvim'
-
-" Lua line
-Plug 'hoob3rt/lualine.nvim'
-
-" For showing pictogram
-Plug 'onsails/lspkind-nvim'
-
-call plug#end()
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Theme
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 colorscheme palenight
@@ -482,8 +482,8 @@ let g:gitgutter_max_signs = 1000
 """"""""""""""""
 "" ale
 " Error and warning signs.
-let g:ale_sign_error = '⤫'
-let g:ale_sign_warning = '⚠'
+let g:ale_sign_error = ''
+let g:ale_sign_warning = ''
 "let g:ale_linters = {'proto': ['protoc-gen-lint']}
 "let g:ale_fixers = {
 "\   'javascript': ['eslint'],
@@ -551,15 +551,10 @@ command! -bang -nargs=* Rg
 	\ fzf#vim#with_preview({'options': ['--delimiter=:', '--nth=2..', '--info=inline']}),
 	\ <bang>0)
 
-	"\ {'options': '--delimiter : --nth 4..'},
-	"\ 1, {'options': ['--delimiter' , '--nth 4..', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']},
-"command! -bang -nargs=* Rg
-"  \ call fzf#vim#grep(
-"  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-"  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-"  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-"  \   <bang>0)
-nnoremap <C-f> :Rg<Cr>
+" Prevent Rg open inside NERD_tree
+" Simply call nnoremap <C-f> :Rg<Cr> if NERD_tree is not used
+nnoremap <silent> <expr> <C-f> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Rg\<cr>"
+
 
 let g:fzf_preview_window = ['right:50%', 'ctrl-/']
 
@@ -604,6 +599,8 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 " Prevent FZF open file in NERDTree
 autocmd VimEnter * nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
+"au BufEnter * if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree' && winnr('$') > 1 | b# | exe "normal! \<c-w>\<c-w>" | :blast | endif
+
 
 " Remap next hunk
 let g:NERDTreeMapNextHunk = '<leader>j'
