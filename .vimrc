@@ -11,7 +11,7 @@ Plug 'scrooloose/nerdtree'
 " Disable due to bad performance https://github.com/Xuyuanp/nerdtree-git-plugin/issues/76
 " Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdcommenter'
-Plug 'tyok/nerdtree-ack'
+Plug 'trietphm/nerdtree-ag'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'terryma/vim-multiple-cursors'
 "Plug 'scrooloose/syntastic'
@@ -19,16 +19,12 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
-if has('nvim')
-  Plug 'fatih/vim-go'
-  Plug 'sebdah/vim-delve'
-  Plug 'SirVer/ultisnips'
-endif
+
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'sebdah/vim-delve'
+Plug 'SirVer/ultisnips'
+
 Plug 'AndrewRadev/splitjoin.vim'
-"Plug 'morhetz/gruvbox'
-"Plug 'chriskempson/base16-vim'
-"Plug 'ayu-theme/ayu-vim'
-Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'othree/html5.vim'
 Plug 'maksimr/vim-jsbeautify'
@@ -42,32 +38,34 @@ Plug 'honza/vim-snippets'
 "Plug 'jiangmiao/auto-pairs'
 "Plug 'easymotion/vim-easymotion'
 "Plug 'majutsushi/tagbar'
-Plug 'Shougo/echodoc.vim'
+"Plug 'Shougo/echodoc.vim'
 "Plug 'godlygeek/tabular'
 "Plug 'plasticboy/vim-markdown'
 Plug 'mileszs/ack.vim'
 "Plug 'johngrib/vim-game-code-break'
-Plug 'airblade/vim-gitgutter'
-Plug 'wakatime/vim-wakatime'
-Plug 'pangloss/vim-javascript'
-Plug 'moll/vim-node'
+"Plug 'airblade/vim-gitgutter'
+"Plug 'wakatime/vim-wakatime'
+"Plug 'pangloss/vim-javascript'
+"Plug 'moll/vim-node'
 Plug 'w0rp/ale'
 "Plug 'digitaltoad/vim-pug'
 "Plug 'mustache/vim-mustache-handlebars'
-Plug 'Chiel92/vim-autoformat'
-Plug 'posva/vim-vue'
-Plug 'wookayin/vim-typora'
+"Plug 'Chiel92/vim-autoformat'
+"Plug 'posva/vim-vue'
+"Plug 'wookayin/vim-typora'
 "Plug 'sbdchd/neoformat'
 "Plug 'vim-utils/vim-ruby-fold'
-Plug 'isRuslan/vim-es6'
+"Plug 'isRuslan/vim-es6'
 "Plug 'ternjs/tern_for_vim'
 Plug 'Yggdroot/indentLine'
 "Plug 'sonph/onehalf'
 Plug 'drewtempelmeyer/palenight.vim'
+" Better palenight with nvim 0.5
+" Plug 'Cybolic/palenight.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-Plug 'reedes/vim-pencil'
+"Plug 'reedes/vim-pencil'
 
 " RUBY 
 " 
@@ -87,11 +85,12 @@ Plug 'rust-lang/rust.vim'
 Plug 'editorconfig/editorconfig-vim'
 
 " Ansible
-Plug 'pearofducks/ansible-vim'
-" DBML
-Plug 'jidn/vim-dbml'
+Plug 'pearofducks/ansible-vim', { 'do': './UltiSnips/generate.sh' }
 
-Plug 'cespare/vim-toml'
+" DBML
+"Plug 'jidn/vim-dbml'
+
+"Plug 'cespare/vim-toml'
 
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
@@ -126,6 +125,7 @@ Plug 'cakebaker/scss-syntax.vim'
 " Set icons per file extension
 Plug 'ryanoasis/vim-devicons'
 Plug 'kyazdani42/nvim-web-devicons'
+
 " Color the icon
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
@@ -140,6 +140,18 @@ Plug 'hoob3rt/lualine.nvim'
 
 " For showing pictogram
 Plug 'onsails/lspkind-nvim'
+
+" Show color on hex text
+Plug 'norcalli/nvim-colorizer.lua'
+
+" Show git information
+Plug 'nvim-lua/plenary.nvim'
+Plug 'lewis6991/gitsigns.nvim'
+
+" Show LSP status for statusline
+Plug 'nvim-lua/lsp-status.nvim'
+
+Plug 'neovim/nvim-lspconfig'
 
 call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -324,6 +336,7 @@ nnoremap <Tab> >>
 " for insert mode
 inoremap <S-Tab> <C-d>
 
+set updatetime=150
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backup and undo
@@ -460,10 +473,11 @@ if has("mac") || has("macunix")
     vmap <D-k> <M-k>
 endif
 
-" don't give |ins-completion-menu| messages.
+" don't pass message to |ins-completion-menu| 
 set shortmess+=c
 
 " always show signcolumns
+" FIXME can break in old vim
 set signcolumn=yes
 
 
@@ -480,16 +494,6 @@ colorscheme palenight
 let g:gitgutter_max_signs = 1000
 
 """"""""""""""""
-"" ale
-" Error and warning signs.
-let g:ale_sign_error = ''
-let g:ale_sign_warning = ''
-"let g:ale_linters = {'proto': ['protoc-gen-lint']}
-"let g:ale_fixers = {
-"\   'javascript': ['eslint'],
-"\}
-
-""""""""""""""""
 " bufferline
 " Fast moving tab bufferline
 nnoremap <silent><leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
@@ -504,9 +508,11 @@ nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
 
 """""""""""""""""""""""
 """ echo doc
-if has('nvim')
-  let g:echodoc_enable_at_startup = 1
-endif
+"let g:echodoc#enable_at_startup = 1
+"let g:echodoc#type = 'floating'
+" To use a custom highlight for the float window,
+" change Pmenu to your highlight group
+"highlight link EchoDocFloat Pmenu
 
 """""""""""""""""""""""
 """ ack.vim
@@ -538,6 +544,9 @@ map <C-b> :FzfBTags<cr>
 
 " Map Ctrl + a to set Ansible file type
 map <C-a> :set ft=yaml.ansible<cr>
+let g:ansible_attribute_highlight = "a"
+let g:ansible_extra_keywords_highlight = 1
+let g:ansible_loop_keywords_highlight = 'Constant' 
 
 " Map Leader _+ p to FzfBuffer
 map <leader>p :FzfBuffers<cr>
@@ -602,6 +611,7 @@ autocmd VimEnter * nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? 
 "au BufEnter * if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree' && winnr('$') > 1 | b# | exe "normal! \<c-w>\<c-w>" | :blast | endif
 
 
+
 " Remap next hunk
 let g:NERDTreeMapNextHunk = '<leader>j'
 let g:NERDTreeMapPrevHunk = '<leader>k'
@@ -644,7 +654,7 @@ endif
 nnoremap <Esc> :pc<CR> :cclose<CR>
 autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
-let g:go_fmt_command = "goimports"
+let g:go_fmt_command = "gopls"
 let g:go_fmt_autosave = 1
 let g:go_snippet_case_type = "camelcase"
 let g:go_highlight_types = 1
@@ -658,13 +668,9 @@ let g:go_highlight_build_constraints = 1
 let g:go_metalinter_enabled = ['vet', 'errcheck']
 let g:go_metalinter_autosave = 1
 let g:go_metalinter_autosave_enabled = ['vet']
-let g:syntastic_go_checkers = ['govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-let g:syntastic_aggregate_errors = 1
-let g:go_list_type = "quickfix"
 let g:go_auto_type_info = 1
-set updatetime=100
 let g:go_auto_sameids = 1
+let g:go_doc_keywordprg_enabled = 0
 au FileType go nmap gi <Plug>(go-install)
 au FileType go nmap gt <Plug>(go-test)
 let g:go_def_mode='gopls'
@@ -680,98 +686,23 @@ augroup END
 
 map <Leader>i :call fzf#run({'source': 'gopkgs', 'sink':'GoImport', 'option': 'm+', 'down': 30})<CR>
 
-
-"""""""""""""""""""""""""""""""
-""" Tagbar
-
-" Map F8 to toggle Tagbar
-"nmap <F8> :TagbarToggle<CR>
-
-" Tagbar for go
-"let g:tagbar_type_go = {
-"    \ 'ctagstype' : 'go',
-"    \ 'kinds'     : [
-"        \ 'p:package',
-"        \ 'i:imports:1',
-"        \ 'c:constants',
-"        \ 'v:variables',
-"        \ 't:types',
-"        \ 'n:interfaces',
-"        \ 'w:fields',
-"        \ 'e:embedded',
-"        \ 'm:methods',
-"        \ 'r:constructor',
-"        \ 'f:functions'
-"    \ ],
-"    \ 'sro' : '.',
-"    \ 'kind2scope' : {
-"        \ 't' : 'ctype',
-"        \ 'n' : 'ntype'
-"    \ },
-"    \ 'scope2kind' : {
-"        \ 'ctype' : 't',
-"        \ 'ntype' : 'n'
-"    \ },
-"    \ 'ctagsbin'  : 'gotags',
-"    \ 'ctagsargs' : '-sort -silent'
-"    \ }
-"
-"let g:tagbar_type_ruby = {
-"    \ 'kinds' : [
-"        \ 'm:modules',
-"        \ 'c:classes',
-"        \ 'd:describes',
-"        \ 'C:contexts',
-"        \ 'f:methods',
-"        \ 'F:singleton methods'
-"    \ ]
-"    \ }
-"
-"let g:tagbar_type_markdown = {
-"    \ 'ctagstype' : 'markdown',
-"    \ 'kinds' : [
-"        \ 'h:Heading_L1',
-"        \ 'i:Heading_L2',
-"        \ 'k:Heading_L3'
-"    \ ]
-"    \ }
-"
-"if executable('ripper-tags')
-"  let g:tagbar_type_ruby = {
-"      \ 'kinds'      : ['m:modules',
-"                      \ 'c:classes',
-"                      \ 'C:constants',
-"                      \ 'F:singleton methods',
-"                      \ 'f:methods',
-"                      \ 'a:aliases'],
-"      \ 'kind2scope' : { 'c' : 'class',
-"                       \ 'm' : 'class' },
-"      \ 'scope2kind' : { 'class' : 'c' },
-"      \ 'ctagsbin'   : 'ripper-tags',
-"      \ 'ctagsargs'  : ['-f', '-']
-"      \ }
-"endif
-
-"""""""""""""""""""""""
-""" Easy motion
-
-" <Leader>f{char} to move to {char}
-"nmap <Leader>f <Plug>(easymotion-overwin-f)
-"
-"" Move to line
-"map <Leader>L <Plug>(easymotion-bd-jk)
-"nmap <Leader>L <Plug>(easymotion-overwin-line)
-
-" gitgutter
-nmap <Leader>j <Plug>(GitGutterNextHunk)
-nmap <Leader>k <Plug>(GitGutterPrevHunk)
-" Put this in vimrc or a plugin file of your own.
-" After this is configured, :ALEFix will try and fix your JS code with ESLint.
+""""""""""""""""
+"" ale
+" Error and warning signs.
+let g:ale_sign_error = ''
+let g:ale_sign_warning = ''
 let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
-let g:ale_linters = {'vue': ['eslint', 'vls'], 'yaml': []}
+let g:ale_linters = {
+	\ 'vue': ['eslint', 'vls'], 
+	\ 'yaml': [],
+	\ 'json': ['jq', 'jsonlint']
+	\ }
+let g:ale_disable_lsp = 1
 let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\ 'vue': ['eslint']
+\ 'javascript': ['eslint', 'prettier', 'remove_trailing_lines'],
+\ 'vue': ['eslint', 'trim_whitespace'],
+\ 'yml': ['trim_whitespace'],
+\ 'yaml': ['trim_whitespace'],
 \}
 
 " Set this setting in vimrc if you want to fix files automatically on save.
@@ -814,13 +745,6 @@ set tags=./tags;,./gems.tags;
 " devicons
 "set guifont=DroidSansMono\ Nerd\ Font:h11
 
-" Customize indent line
-"let g:indentLine_char = '│'
-"let g:indentLine_setColors = 0
-"let g:indentLine_color_term = 239
-"let g:indentLine_concealcursor = 'inc'
-"let g:indentLine_conceallevel = 2
-
 let g:indentLine_concealcursor="nc"
 "let g:indentLine_char = '│'
 let g:indentLine_color_gui = '#444444'
@@ -835,7 +759,7 @@ let g:indentLine_setColors=1
 "    \ }
 "let ayucolor="mirage"
 let g:palenight_terminal_italics=1
-let g:fzf_colors = { 'hl': ['fg', 'Comment'] }
+"let g:fzf_colors = { 'hl': ['fg', 'Comment'] }
 
 " Those shit to support italic
 set t_ZH=[3m
@@ -879,6 +803,7 @@ let g:terraform_align=1
 " Allow vim-terraform to automatically format *.tf and *.tfvars files with terraform fmt. 
 let g:terraform_fmt_on_save=1
 
+""""""""""""""""""""""""""""""""""""""
 " COC
 " coc highlight
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -895,13 +820,30 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
+
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_prev = '<S-tab>'
+
+"inoremap <silent><expr> <TAB>
+"      \ pumvisible() ? coc#_select_confirm() :
+"      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"      \ <SID>check_back_space() ? "\<TAB>" :
+"      \ coc#refresh()
+"
+"function! s:check_back_space() abort
+"  let col = col('.') - 1
+"  return !col || getline('.')[col - 1]  =~# '\s'
+"endfunction
+"
 "let g:coc_snippet_next = '<tab>'
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -909,11 +851,6 @@ if has('nvim')
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
@@ -924,10 +861,42 @@ else
   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
-"endwise
-"let g:endwise_no_mappings = v:true
-"inoremap <expr> <Plug>CustomCocCR pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-"imap <CR> <Plug>CustomCocCR<Plug>DiscretionaryEnd
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Automatically show documentation when hovering
+
+"function! ShowDocIfNoDiagnostic(timer_id)
+"  if (coc#float#has_float() == 0 && CocHasProvider('hover') == 1)
+"    silent call CocActionAsync('doHover')
+"  endif
+"endfunction
+"
+"function! s:show_hover_doc()
+"  call timer_start(3000, 'ShowDocIfNoDiagnostic')
+"endfunction
+"
+"autocmd CursorHoldI * :call <SID>show_hover_doc()
+"autocmd CursorHold * :call <SID>show_hover_doc()
+
+
+" End coc.nvim config
+""""""""""""""""""""""""""""""""""""""
 
 " Custom icon color
 let s:brown = "905532"
@@ -949,6 +918,41 @@ let s:white = "FFFFFF"
 let s:rspec_red = 'FE405F'
 let s:git_orange = 'F54D27'
 
+" performance issue
+let g:NERDTreeHighlightCursorline = 0
 let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
 let g:NERDTreeExtensionHighlightColor['go'] = s:blue " sets the color of css files to blue
+
+
+" coc-go
+"""""""""'
+"autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')'
+
+
+" Ansible vim
+"""""""""""""""""""""""""
+
+" The role's paths
+let g:ansible_goto_role_paths = './roles,./ansible_galaxy'
+
+function! FindAnsibleRoleUnderCursor()
+  if exists("g:ansible_goto_role_paths")
+    let l:role_paths = g:ansible_goto_role_paths
+  else
+    let l:role_paths = "./roles"
+  endif
+  let l:tasks_main = expand("<cfile>") . "/tasks/main.yml"
+  let l:found_role_path = findfile(l:tasks_main, l:role_paths)
+  if l:found_role_path == ""
+    echo l:tasks_main . " not found"
+  else
+    execute "edit " . fnameescape(l:found_role_path)
+  endif
+endfunction
+
+"Go to definition role 
+au BufRead,BufNewFile *.yml nnoremap <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
+au BufRead,BufNewFile *.yml vnoremap <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
+
+""""""""""""""""
