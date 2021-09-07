@@ -29,13 +29,47 @@ require("bufferline").setup{
 		numbers = function(opts)
 			return string.format('%s', opts.ordinal)
 		end,
-		separator_style = "padded_slant",
+		--separator_style = "padded_slant",
+		name_formatter = function(buf)  -- buf contains a "name", "path" and "bufnr"
+		  --return 
+ 		  ---- remove extension from markdown files for example
+ 		  --if buf.name:match('%.md') then
+ 		  --  return vim.fn.fnamemodify(buf.name, ':t:r')
+ 		  --end
+		  return buf.name
+ 		end,
 	}
 	
 }
 
+local lsp_status = require('lsp-status')
+lsp_status.register_progress()
+
 require('lualine').setup{
-	options = {theme = 'palenight'}
+	options = {theme = 'palenight'},
+	extension = {'nerdtree'},
+	sections = {
+	    lualine_a = {'mode'},
+	    lualine_b = {'branch'},
+	    lualine_c = {
+		    {
+		      'filename',
+		      file_status = true, -- displays file status (readonly status, modified status)
+		      path = 1 -- 0 = just filename, 1 = relative path, 2 = absolute path
+		    }
+		  },
+	    lualine_x = {'encoding', 'fileformat', 'filetype'},
+	    lualine_y  = {'g:coc_status'},
+	    lualine_z = { function() return '%l:%c/%L' end },
+	  },
+	inactive_sections = {
+	    lualine_a = {},
+	    lualine_b = {},
+	    lualine_c = {'filename'},
+	    lualine_x = {'location'},
+	    lualine_y = {},
+	    lualine_z = {}
+ 	},
 }
 
 require('lspkind').init({
@@ -83,8 +117,33 @@ require('lspkind').init({
     },
 })
 
+require'colorizer'.setup()
+
+require('gitsigns').setup{
+    current_line_blame = true,
+    keymaps = {
+      -- Default keymap options
+      noremap = true,
+      ['n <Leader>j'] = { expr = true, "&diff ? '<Leader>j' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'"},
+      ['n <Leader>k'] = { expr = true, "&diff ? '<Leader>k' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'"},
+    },
+    watch_index = {
+      interval = 2000,
+      follow_files = true
+    },
+}
+
+require'lspconfig'.gopls.setup{
+  on_attach = on_attach,
+}
+
+require'lspconfig'.ansiblels.setup{
+  filetypes = { "yml", "yaml" }
+}
+
 --print('lua in init.vim loaded')
 EOF
+
 "au FileType go setlocal foldmethod=expr foldnestmax=3 foldlevelstart=2 foldexpr=nvim_treesitter#foldexpr()
 
 lua <<EOF
