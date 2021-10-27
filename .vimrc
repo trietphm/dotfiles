@@ -7,12 +7,12 @@ set nocompatible
 call plug#begin('~/.vim/plugged')
 "Plug 'mattn/emmet-vim'
 "Plug 'dracula/vim'
-Plug 'scrooloose/nerdtree'
+"Plug 'scrooloose/nerdtree'
 " Disable due to bad performance https://github.com/Xuyuanp/nerdtree-git-plugin/issues/76
 " Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdcommenter'
 Plug 'trietphm/nerdtree-ag'
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim'
 Plug 'terryma/vim-multiple-cursors'
 "Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-fugitive'
@@ -127,7 +127,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'kyazdani42/nvim-web-devicons'
 
 " Color the icon
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+"Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Show a charater | in each indent
 Plug 'lukas-reineke/indent-blankline.nvim'
@@ -152,6 +152,13 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'nvim-lua/lsp-status.nvim'
 
 Plug 'neovim/nvim-lspconfig'
+
+Plug 'kyazdani42/nvim-tree.lua'
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+
 
 call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -518,7 +525,7 @@ nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
 """ ack.vim
 let g:ackprg = 'ag --vimgrep'
 "let g:ackpreview = 1
-noremap <Leader>aa :Ack! <cword><cr>
+"noremap <Leader>aa :Ack! <cword><cr>
 noremap <Leader>a :Ack!
 
 """""""""""""""""""""""
@@ -539,7 +546,7 @@ command! -bang -nargs=* Ag
 inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 
 " Map Ctrl + p to FZF
-map <C-p> :FZF<cr>
+"map <C-p> :FZF<cr>
 map <C-b> :FzfBTags<cr>
 
 " Map Ctrl + a to set Ansible file type
@@ -586,10 +593,10 @@ vmap <C-_>   <Plug>NERDCommenterToggle<CR>gv
 """""""""""""""""""""""""""""""""""""
 """ NERDTree
 " Map Toggle NERDTree
-map <Leader>n :NERDTreeToggle<CR>
-
-" Open current file in NERDTree
-map <Leader>F :NERDTreeFind<CR>
+"map <Leader>n :NERDTreeToggle<CR>
+"
+"" Open current file in NERDTree
+"map <Leader>F :NERDTreeFind<CR>
 
 "Remap key to split screen
 let NERDTreeMapOpenVSplit='<C-v>'
@@ -601,14 +608,14 @@ let g:NERDTreeIgnore = ['^node_modules$']
 
 " open NERDTree automatically on vim start, even if no file is specified
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Auto close NERDTree if it is the last and only buffer
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" Prevent FZF open file in NERDTree
-autocmd VimEnter * nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
-"au BufEnter * if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree' && winnr('$') > 1 | b# | exe "normal! \<c-w>\<c-w>" | :blast | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"
+"" Prevent FZF open file in NERDTree
+"autocmd VimEnter * nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
+""au BufEnter * if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree' && winnr('$') > 1 | b# | exe "normal! \<c-w>\<c-w>" | :blast | endif
 
 
 
@@ -699,7 +706,7 @@ let g:ale_linters = {
 	\ }
 let g:ale_disable_lsp = 1
 let g:ale_fixers = {
-\ 'javascript': ['eslint', 'prettier', 'remove_trailing_lines'],
+\ 'javascript': ['eslint', 'remove_trailing_lines'],
 \ 'vue': ['eslint', 'trim_whitespace'],
 \ 'yml': ['trim_whitespace'],
 \ 'yaml': ['trim_whitespace'],
@@ -790,7 +797,7 @@ nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
 " Open the definition in a vertical split
 map <Leader>] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 nnoremap <leader>d :call fzf#vim#tags(expand('<cword>'), {'options': '--exact --select-1 --exit-0'})<CR>
-nnoremap <C-p> :call fzf#vim#tags(expand('<cword>'), {'options': '--exact --select-1'})<CR>
+"nnoremap <C-p> :call fzf#vim#tags(expand('<cword>'), {'options': '--exact --select-1'})<CR>
 
 "rust
 let g:rustfmt_autosave = 1
@@ -843,7 +850,7 @@ let g:coc_snippet_prev = '<S-tab>'
 "endfunction
 "
 "let g:coc_snippet_next = '<tab>'
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -956,3 +963,29 @@ au BufRead,BufNewFile *.yml nnoremap <leader>gr :call FindAnsibleRoleUnderCursor
 au BufRead,BufNewFile *.yml vnoremap <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
 
 """"""""""""""""
+
+
+"NVIM Tree
+"""""""""""""""""""'
+" Auto close NvimTree if it is the last and only buffer
+let g:nvim_tree_auto_close = 1
+
+let g:nvim_tree_gitignore = 1
+"let g:nvim_tree_auto_open = 1
+"
+let g:nvim_tree_ignore = [ '.git', '^node_modules$', '.cache', '.github', '.vscode', '.gitignore', '.dockerignore' ]
+
+"Auto open nvim tree on start
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | exec "NvimTreeToggle" | endif
+
+" Map Toggle NvimTre
+map <Leader>n :NvimTreeToggle<CR>
+
+" Open current file in Nvim Tree
+map <Leader>F :NvimTreeFindFile<CR>
+
+" Telescope
+""""""""""""""
+nnoremap <C-p> <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope live_grep<cr>
+nnoremap <Leader>aa <cmd>Telescope grep_string<cr>
