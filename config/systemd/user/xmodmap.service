@@ -1,0 +1,11 @@
+[Unit]
+Description=Change keyboard layout AFTER LOGIN TO GUI session
+After=graphical.target
+
+[Service]
+#execute once only
+Type=oneshot
+ExecStart=/usr/bin/xmodmap /home/triet/.xmodmaprc
+
+[Install]
+WantedBy=graphical.target
