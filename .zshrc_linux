@@ -1,0 +1,144 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH=/home/triet/.oh-my-zsh
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="winz"
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+# Must always put zsh-syntax-highlighting at the end of the list.
+plugins=(git git-prompt git-escape-magic golang gem doctl zsh-autosuggestions zsh-interactive-cd asdf terraform colorize colored-man-pages command-not-found sudo copybuffer copydir copyfile safe-paste)
+
+export ZSH_COLORIZE_STYLE="monokai"
+
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+#source ~/.bashrc
+
+# Alias vim to nvim
+#if type nvim > /dev/null 2>&1; then
+#  alias vim='nvim'
+#fi
+export PATH="/usr/local/share/python/:$PATH"
+# Powerline
+#. /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+#. /Users/triet/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
+#. /usr/local/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
+
+# Auto suggestion
+#source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+alias v='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
+alias vim='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
+alias ov='vim'
+
+
+alias gut='git'
+alias shs='ssh'
+alias 'git stauts'='git status'
+alias 'git chekcout'='git checkout'
+alias 'clear'='clear -x'
+alias docker='podman'
+alias kubectl="minikube kubectl --"
+alias x='xmodmap /home/triet/.Xmodmap'
+
+alias h='cd /home/triet/workspace/holistics/holistics'
+alias d='cd /home/triet/workspace/holistics/deploy'
+alias n='cd /home/triet/workspace/go/src/restsheet'
+alias less='cless'
+
+command -v vg >/dev/null 2>&1 && eval "$(vg eval --shell zsh)"
+
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/go/bin
+export PATH=$PATH:$HOME/.local/bin
+
+[[ -e ~/.profile ]] && emulate sh -c 'source ~/.profile'
+
+ # Disable keyring UI prompt
+export SSH_AUTH_SOCK=''
+
+export ORACLE_HOME=/opt/oracle/
+export LD_LIBRARY_PATH=/opt/oracle/instantclient/
+export EDITOR=nvim
+export GOPATH=/home/triet/workspace/go
+export PATH=$PATH:$GOPATH/bin
+export GPG_TTY=$(tty)
+
+
+#stty intr ^o

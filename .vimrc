@@ -1,10 +1,13 @@
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
+
 set nocompatible
 
 " Plug management
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call plug#begin('~/.vim/plugged')
+"call plug#begin('~/.vim/plugged')
+call plug#begin(stdpath('data') . '/plugged')
+
 "Plug 'mattn/emmet-vim'
 "Plug 'dracula/vim'
 "Plug 'scrooloose/nerdtree'
@@ -160,6 +163,10 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 
+"Plug 'yaegassy/coc-ansible', {'do': 'yarn install --frozen-lockfile'}
+
+Plug 'github/copilot.vim'
+
 call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -176,7 +183,7 @@ set t_Co=256
 " Reduce esc delay time 
 set timeoutlen=1000 ttimeoutlen=5
 
-set clipboard=unnamedplus
+set clipboard+=unnamedplus
 
 " Show line number
 set relativenumber
@@ -813,7 +820,10 @@ let g:terraform_fmt_on_save=1
 """"""""""""""""""""""""""""""""""""""
 " COC
 " coc highlight
-autocmd CursorHold * silent call CocActionAsync('highlight')
+
+if has('nvim')
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+endif
 
 let g:LanguageClient_serverCommands = {
   \ 'cpp': ['clangd'],
@@ -968,12 +978,12 @@ au BufRead,BufNewFile *.yml vnoremap <leader>gr :call FindAnsibleRoleUnderCursor
 "NVIM Tree
 """""""""""""""""""'
 " Auto close NvimTree if it is the last and only buffer
-let g:nvim_tree_auto_close = 1
+"let g:nvim_tree_auto_close = 1
 
 let g:nvim_tree_gitignore = 1
 "let g:nvim_tree_auto_open = 1
 "
-let g:nvim_tree_ignore = [ '.git', '^node_modules$', '.cache', '.github', '.vscode', '.gitignore', '.dockerignore' ]
+"let g:nvim_tree_ignore = [ '.git', '^node_modules$', '.cache', '.github', '.vscode', '.gitignore', '.dockerignore' ]
 
 "Auto open nvim tree on start
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | exec "NvimTreeToggle" | endif
@@ -989,3 +999,8 @@ map <Leader>F :NvimTreeFindFile<CR>
 nnoremap <C-p> <cmd>Telescope find_files<cr>
 nnoremap <leader>ff <cmd>Telescope live_grep<cr>
 nnoremap <Leader>aa <cmd>Telescope grep_string<cr>
+
+
+au TextYankPost * silent! lua vim.highlight.on_yank {timeout=300}
+"Highlight yank for nvim
+"vim augroup highlight_yank autocmd! autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000) augroup END 
