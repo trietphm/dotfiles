@@ -1,7 +1,7 @@
 My dotfiles
 =====
 
-
+## Tmux
 - Install tmux plugin manager: https://github.com/tmux-plugins/tpm
 
 ## Remap keyboard
