@@ -51,7 +51,9 @@ ZSH_THEME="winz"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+
+# NOTE: Need to clone from https://github.com/zsh-users/zsh-autosuggestions
+plugins=(git zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -97,7 +99,7 @@ export PATH="/usr/local/share/python/:$PATH"
 #. /usr/local/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
 
 # Auto suggestion
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+#source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 alias v='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
 alias vim='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
