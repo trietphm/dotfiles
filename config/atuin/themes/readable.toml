@@ -1,0 +1,9 @@
+[theme]
+name = "readable"
+
+[colors]
+# Selected command in the search TUI (default was dark red).
+# Note: also colors the duration column for failed commands.
+AlertError = "#61afef"
+# Matched search characters on the selected row (default was dark yellow).
+AlertWarn = "#e5c07b"
